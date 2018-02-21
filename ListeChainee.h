@@ -12,9 +12,6 @@ typedef struct ListeCh{                           // Structure de la liste chain
 }ListeCh_t;
 
 
-ListeCh_t * insere(ListeCh_t **, float, int, int);
-
+ListeCh_t * insereDec(ListeCh_t **, float, int, int);
 
 #endif
-
-

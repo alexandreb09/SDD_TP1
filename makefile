@@ -5,7 +5,7 @@ CFLAGS = -Wall -Wextra -g -O2
 LDFLAGS = -lm
 
 #liste des fichiers objets
-OBJ = main.o TP1.o
+OBJ = main.o TP1.o ListeChainee.o
 
 #règle de production finale
 prog : $(OBJ)

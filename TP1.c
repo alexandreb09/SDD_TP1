@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "TP1.h"
 #include "ListeChainee.h"
 
 
@@ -74,25 +75,22 @@ void AfficheMatrice(float ** Tab,int nbLigne,int nbColonne){
 }
 
 
-ListeCh_t * Mattoliste(float ** Tab,int nbLigne,int nbColonne,int K){
-    ListeCh_t * list = NULL;
-    int k,l;
-    int cmp;
-    cmp=0;
+ListeCh_t * matToListe(float ** Tab,int nbLigne,int nbColonne,int K){
+    ListeCh_t                 * list = NULL;
+    int                         k,l, cmp =0;
 
     for (k=0; k<nbLigne;++k){
 		for (l=0;l<nbColonne;++l){
 			if(cmp<K){
-				list = insere(&list,Tab[k][l],nbLigne,nbColonne);
+				list = insereDec(&list,Tab[k][l],nbLigne,nbColonne);
+                    cmp++;
 				}
 			else{
-			   if(Tab[k][l]<list->CoutProd){
-					list = insere(&list,Tab[k][l],nbLigne,nbColonne);
-					}
+                    if(Tab[k][l]<list->CoutProd){
+					list = insereDec(&list,Tab[k][l],nbLigne,nbColonne);
+                    }
 			}
 		}
 	 }
 	 return list;
-    
-}    
-
+}
