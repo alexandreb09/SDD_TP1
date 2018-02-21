@@ -12,7 +12,7 @@ prog : $(OBJ)
 	$(CC) $(OBJ) $(LDFLAGS) -o prog
 
 #règle de production pour chaque fichier
-main.o : main.c
+main.o : main.c ListeChainee.o
 	$(CC) -c main.c $(CFLAGS)
 
 TP1.o : TP1.c ListeChainee.o

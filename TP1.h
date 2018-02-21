@@ -7,6 +7,6 @@
 float ** FichierToMatrice(char *, int *, int *);
 void AfficheMatrice(float **,int,int);
 
-ListeCh_t * matToListe(float **,int,int,int);
+ListeCh_t * matToListe(float **,int,int);
 
 #endif

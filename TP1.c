@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "TP1.h"
 #include "ListeChainee.h"
-
+#define K 5
 
 /* -----------------------------------------------------------------------*/
 /*                            FichierToMatrice
@@ -75,22 +75,44 @@ void AfficheMatrice(float ** Tab,int nbLigne,int nbColonne){
 }
 
 
-ListeCh_t * matToListe(float ** Tab,int nbLigne,int nbColonne,int K){
-    ListeCh_t                 * list = NULL;
-    int                         k,l, cmp =0;
 
-    for (k=0; k<nbLigne;++k){
-		for (l=0;l<nbColonne;++l){
-			if(cmp<K){
-				list = insereDec(&list,Tab[k][l],nbLigne,nbColonne);
-                    cmp++;
-				}
-			else{
-                    if(Tab[k][l]<list->CoutProd){
-					list = insereDec(&list,Tab[k][l],nbLigne,nbColonne);
-                    }
-			}
-		}
-	 }
-	 return list;
+/* -----------------------------------------------------------------------*/
+/*                            matToListe
+
+     Role : Renvoie les K-plus-petits coefficients d'une matrice sous forme de
+            de liste chainée
+
+     Entrée : Tab :       matrice 2 dimensions (contenant des flottants)
+              nbLigne :   nombre de lignes (de la matrice)
+              nbColonne : nombre de colonnes (de la matrice)
+     Sortie : Une liste chainée contenant les K-plus-petits coefficients
+               (ainsi que l'usine et la période)
+
+     Variable locales : i : Ligne courrante
+                        l : Colonne courrante
+                        cmp : compteur, nombre d'élément dans la liste
+                        list : la liste en question
+    Sous fonctions : suppEnTete
+                     insereDec                                            */
+/* -----------------------------------------------------------------------*/
+
+ListeCh_t * matToListe(float ** Tab,int nbLigne,int nbColonne){
+    ListeCh_t                 * list = NULL;
+    ListeCh_t                 * temp;
+    int                         i,l, cmp =0;                                    // Nombre d'elt dans la liste
+    for (i=0; i<nbLigne;++i){                                                   // Pour chaque élément de la matrice
+         for (l=0; l<nbColonne;++l){
+              if (cmp < K){                                                     // Si on a pas inséré les k premiers éléments
+                   list = insereDec(&list,Tab[i][l],i,l);                       // On les insère (dans tous les cas)
+                   cmp++;                                                       // on incrémente le compteur
+              }
+              else{
+                   if(Tab[i][l] < list->coutProd){                              // Regarde si l'élt courant < au premier élt de la liste
+                        list = suppEnTete(list);
+                        list = insereDec(&list,Tab[i][l],i,l);                  // et on insère l'élt courant
+                   }
+              }
+         }
+    }
+    return list;
 }
