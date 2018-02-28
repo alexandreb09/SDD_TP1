@@ -50,3 +50,31 @@ void affListe(ListeCh_t * liste){
    		liste = liste->suiv;
    }
 }
+
+
+void libererListe(ListeCh_t * Liste){
+	ListeCh_t * temp, * cour = Liste;
+	while(cour){
+		temp = cour;
+		cour = cour->suiv;
+		free(temp);
+	}
+}
+
+/*
+void SuppOcc(ListeCh_t ** pliste){
+	ListeCh_t * cour = *pliste;
+	ListeCh_t * cour2;
+
+	while (cour != NULL){
+		cour2=cour;
+		while(cour2 != NULL){
+			if(cour->IndLig > cour2->IndLig){
+				cour->IndLig = cour2->IndLig;
+			}
+			cour2=cour2->suiv;
+		}
+		cour=cour->suiv;
+	}
+}
+*/

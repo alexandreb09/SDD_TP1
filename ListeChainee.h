@@ -15,5 +15,7 @@ typedef struct ListeCh{                           // Structure de la liste chain
 ListeCh_t * insereDec(ListeCh_t **, float, int, int);
 ListeCh_t * suppEnTete(ListeCh_t *);
 void affListe(ListeCh_t *);
+void libererListe(ListeCh_t *);
+void SuppOcc(ListeCh_t **);
 
 #endif

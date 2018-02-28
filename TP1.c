@@ -116,3 +116,25 @@ ListeCh_t * matToListe(float ** Tab,int nbLigne,int nbColonne){
     }
     return list;
 }
+
+void libererMatrice(float ** Mat, int nbLigne){
+     int i = 0;
+     for (i; i < nbLigne; ++i){
+          free(Mat[i]);
+          }
+     free(Mat);
+}
+
+
+
+void Ecrire(char * Nom,ListeCh_t * pliste){
+     FILE                   * fichier = NULL;
+     fichier = fopen(Nom, "w");
+     if (fichier != NULL){
+          while(pliste){
+               fprintf(fichier,"%d %d %0.2f\n", pliste->indLig,pliste->indCol,pliste->coutProd);
+               pliste = pliste->suiv;
+          }
+          fclose(fichier);
+     }
+}

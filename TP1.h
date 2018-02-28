@@ -8,5 +8,7 @@ float ** FichierToMatrice(char *, int *, int *);
 void AfficheMatrice(float **,int,int);
 
 ListeCh_t * matToListe(float **,int,int);
+void libererMatrice(float **, int);
+void Ecrire(char *,ListeCh_t *);
 
 #endif

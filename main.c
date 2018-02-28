@@ -14,6 +14,11 @@ int main (){
 
      liste = matToListe(Matrice,n,m);
      affListe(liste);
+     //SuppOcc(liste);
+     //affListe(&liste);
+     Ecrire("Fihier_rep.txt",liste);
+     libererMatrice(Matrice,n);
+     libererListe(liste);
 
      return 0;
 }
