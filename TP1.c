@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include "TP1.h"
 #include "ListeChainee.h"
-#define K 5
 
 /* -----------------------------------------------------------------------*/
 /*                            FichierToMatrice
@@ -19,26 +18,26 @@
                         m : Nombre de lignes
                         fichier : fichier lu                              */
 /* -----------------------------------------------------------------------*/
-
 float ** FichierToMatrice(char * Nom,int * NbLigne, int * NbColonne) {
      FILE                   * fichier = NULL;
      int                      n, m, i,j;
      float                 ** Tab = NULL;
 
      fichier = fopen(Nom, "r");
-     if (fichier != NULL){                                       // Si le fichier s'est ouvert
-          fscanf(fichier, "%d %d", NbLigne, NbColonne);          // récupère nb colonnes-lignes
-          m = *NbLigne;
-          n = *NbColonne;
-          Tab = malloc(m*sizeof(*Tab));                          // alloue 1 tableau de pointeurs
-          if (Tab != NULL){
-               for (j=0;j<m;++j){                                // alloue pour chaque case une liste
-                    Tab[j] = malloc(n*sizeof(**Tab));            // pour créer la matrice
-               }
-               if (Tab[m-1] != NULL){                            // la dernière correctement affectée
-                    for (i=0; i<m; i++){
-                         for (j=0;j<n; j++){
-                              fscanf(fichier,"%f",&Tab[i][j]);
+     if (fichier != NULL){                                            // Si le fichier s'est ouvert
+          if (fscanf(fichier, "%d %d", NbLigne, NbColonne) != EOF){   // Si le fichier est non vide
+               m = *NbLigne;
+               n = *NbColonne;
+               Tab = malloc(m*sizeof(*Tab));                          // alloue 1 tableau de pointeurs
+               if (Tab != NULL){
+                    for (j=0;j<m;++j){                                // alloue pour chaque case une liste
+                         Tab[j] = malloc(n*sizeof(**Tab));            // pour créer la matrice
+                    }
+                    if (Tab[m-1] != NULL){                            // la dernière correctement affectée
+                         for (i=0; i<m; i++){
+                              for (j=0;j<n; j++){
+                                   fscanf(fichier,"%f",&Tab[i][j]);
+                              }
                          }
                     }
                }
@@ -61,7 +60,6 @@ float ** FichierToMatrice(char * Nom,int * NbLigne, int * NbColonne) {
      Variable locales : i : Ligne courrante
                         j : Colonne courrante                             */
 /* -----------------------------------------------------------------------*/
-
 void AfficheMatrice(float ** Tab,int nbLigne,int nbColonne){
      int                 i, j;
      printf("Ma matrice : \n\t");
@@ -95,14 +93,12 @@ void AfficheMatrice(float ** Tab,int nbLigne,int nbColonne){
     Sous fonctions : suppEnTete
                      insereDec                                            */
 /* -----------------------------------------------------------------------*/
-
-ListeCh_t * matToListe(float ** Tab,int nbLigne,int nbColonne){
+ListeCh_t * matToListe(float ** Tab,int nbLigne,int nbColonne,int k){
     ListeCh_t                 * list = NULL;
-    ListeCh_t                 * temp;
     int                         i,l, cmp =0;                                    // Nombre d'elt dans la liste
     for (i=0; i<nbLigne;++i){                                                   // Pour chaque élément de la matrice
          for (l=0; l<nbColonne;++l){
-              if (cmp < K){                                                     // Si on a pas inséré les k premiers éléments
+              if (cmp < k){                                                     // Si on a pas inséré les k premiers éléments
                    list = insereDec(&list,Tab[i][l],i,l);                       // On les insère (dans tous les cas)
                    cmp++;                                                       // on incrémente le compteur
               }
@@ -117,8 +113,20 @@ ListeCh_t * matToListe(float ** Tab,int nbLigne,int nbColonne){
     return list;
 }
 
+
+/* -----------------------------------------------------------------------*/
+/*                            libererMatrice
+
+     Role : libérer la mémoire allouée pour la matrice
+
+     Entrée : Matrice :   matrice 2 dimensions (contenant des flottants)
+              nbLigne :   nombre de lignes (de la matrice)
+     Sortie : -
+
+     Variable locales : i : Ligne courrante                               */
+/* -----------------------------------------------------------------------*/
 void libererMatrice(float ** Mat, int nbLigne){
-     int i = 0;
+     int            i = 0;
      for (i; i < nbLigne; ++i){
           free(Mat[i]);
           }
@@ -126,15 +134,63 @@ void libererMatrice(float ** Mat, int nbLigne){
 }
 
 
+/* -----------------------------------------------------------------------*/
+/*                            Ecrire
 
-void Ecrire(char * Nom,ListeCh_t * pliste){
+     Role : Sauvergarder la liste chainée en mémoire
+
+     Entrée : Nom :      Nom du fichier dans lequel on enregistre la liste
+              pliste :   liste chainée à sauvegarder
+     Sortie : -
+
+     Variable locales : fichier                                           */
+/* -----------------------------------------------------------------------*/
+void Ecrire(char * Nom, ListeCh_t * pliste){
      FILE                   * fichier = NULL;
      fichier = fopen(Nom, "w");
      if (fichier != NULL){
           while(pliste){
-               fprintf(fichier,"%d %d %0.2f\n", pliste->indLig,pliste->indCol,pliste->coutProd);
+               fprintf(fichier,"%d %d %0.2f\n", pliste->usine,pliste->periode,pliste->coutProd);
                pliste = pliste->suiv;
           }
           fclose(fichier);
      }
+}
+
+
+/* -----------------------------------------------------------------------*/
+/*                            SuppOcc
+
+     Role : Supprimertoutes les occurences de l'usine u
+
+     Entrée : pliste :   liste chainée
+              usine  :   usine à supprimer
+     Sortie : la liste sans occurence de l'usine "usine"
+
+     Variable locales :
+                    - cour : pointeur courant
+                    - prec: pointeur précédent
+                    - temp : variable temporaire                          */
+/* -----------------------------------------------------------------------*/
+void SuppOcc(ListeCh_t ** pliste,int usine){
+	ListeCh_t *                  cour = *pliste;           // pointeur courant
+     ListeCh_t *                  prec = NULL;              // pointeur précédent
+     ListeCh_t *                  temp;                     // pointeur temporaire
+	while (cour != NULL){                                  // Parcours de la liste
+		if(cour->usine == usine){                         // Cas où il faut supprimer la case
+               if (prec == NULL){                           // Si on est en tête
+                    *pliste = cour->suiv;                   // Suppression en tête
+               }
+               else {
+                    prec->suiv = cour->suiv;                // Suppression générale
+               }
+               temp = cour;
+               cour=cour->suiv;
+               free(temp);
+          }
+          else {
+               prec = cour;                                 // pas de suppression
+               cour=cour->suiv;
+          }
+	}
 }
