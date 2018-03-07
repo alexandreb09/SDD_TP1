@@ -1,6 +1,16 @@
+/*========================================================================*/
+/*   Fichier : erreur.h                                                   */
+/*	Role : Gérer les erreurs et en informer l'utilisateur			    */
+/*	Contenu du fichier (déclaration de fonctions):		         	    */
+/*	 		AfficheErreur									    */
+/*														    */
+/*	Dépendance : aucune           							    */
+/*========================================================================*/
+
+
 #ifndef Gard3
 #define Gard3
 
-void afficheErreur(int);
+void AfficheErreur(int);
 
 #endif

@@ -1,3 +1,18 @@
+/*=========================================================================*/
+/*	Fichier : ListeChainee.c										*/
+/*	Role : Module regroupant différentes fonctions sur les listes chainées*/
+/* 		 (indépendant du TP)			    					    	*/
+/*														     */
+/*	Contenu du fichier (fonctions):							    	*/
+/*	 		insereDec										    	*/
+/*			suppEnTete										*/
+/*			AffListe											*/
+/* 			LibererListe										*/
+/*														     */
+/*	Dépendance : aucune		     							     */
+/*=========================================================================*/
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "ListeChainee.h"
@@ -19,9 +34,9 @@
                         fichier : fichier lu                              */
 /* -----------------------------------------------------------------------*/
 ListeCh_t * insereDec (ListeCh_t ** Liste, float coef, int col, int lig){
-	ListeCh_t 			* NewCell;
-	ListeCh_t 			* cour 		= *Liste;
-	ListeCh_t 			* prec		= NULL;
+	ListeCh_t 			* NewCell,
+						* cour 		= *Liste,
+						* prec		= NULL;
 
 	NewCell 	= malloc(sizeof(ListeCh_t));
 	if (NewCell != NULL){
@@ -30,23 +45,23 @@ ListeCh_t * insereDec (ListeCh_t ** Liste, float coef, int col, int lig){
 		NewCell->usine 					= lig;
 		NewCell->suiv 						= NULL;
 
-		if (*Liste == NULL)
-			*Liste = NewCell;
+		if (*Liste == NULL)											// Si la liste est vide
+			*Liste = NewCell;										// Ajout en tête (cas liste vide)
 		else{
-			while (cour->suiv != NULL && (cour->coutProd > coef) ){
+			while (cour->suiv != NULL && (cour->coutProd > coef) ){		// Recherche position pour insertion
 				prec = cour;
 				cour = cour->suiv;
 			}
-			if (cour->coutProd > coef){					// Ajout en fin
+			if (cour->coutProd > coef){								// Ajout en fin
 				cour->suiv = NewCell;
 			}
 			else{
 				NewCell->suiv = cour;
-				if (*Liste == cour){					// Ajout en tête
+				if (*Liste == cour){								// Ajout en tête
 					*Liste = NewCell;
 				}
 				else {
-					prec->suiv = NewCell;				// Ajout général
+					prec->suiv = NewCell;							// Ajout général
 				}
 			}
 		}
@@ -66,13 +81,13 @@ ListeCh_t * insereDec (ListeCh_t ** Liste, float coef, int col, int lig){
      Variable locales : temp : variable temporaire                        */
 /* -----------------------------------------------------------------------*/
 ListeCh_t * suppEnTete(ListeCh_t * Liste){
-	ListeCh_t * temp = Liste->suiv;
+	ListeCh_t 			* temp = Liste->suiv;
 	free(Liste);
 	return temp;
 }
 
 /* -----------------------------------------------------------------------*/
-/*                            affListe
+/*                            AffListe
 
      Role : Afficher une liste chainée
 
@@ -81,8 +96,8 @@ ListeCh_t * suppEnTete(ListeCh_t * Liste){
      Sortie : -
      Variable locales : -					                        */
 /* -----------------------------------------------------------------------*/
-void affListe(ListeCh_t * liste){
-	printf("\nMa liste : \n");
+void AffListe(ListeCh_t * liste){
+	printf("\nListe : \n");
 	while(liste){
      	printf("\tUsine %d, période %d, coût de production %0.2f\n", liste->usine,liste->periode,liste->coutProd);
    		liste = liste->suiv;
@@ -90,7 +105,7 @@ void affListe(ListeCh_t * liste){
 }
 
 /* -----------------------------------------------------------------------*/
-/*                            libererListe
+/*                            LibererListe
 
      Role : Libérer l'espace alloué par une liste chainée
 
@@ -100,8 +115,9 @@ void affListe(ListeCh_t * liste){
      Variable locales : cour : pointeur courant
                    	    temp : variable temporaire				    */
 /* -----------------------------------------------------------------------*/
-void libererListe(ListeCh_t * Liste){
-	ListeCh_t * temp, * cour = Liste;
+void LibererListe(ListeCh_t * Liste){
+	ListeCh_t  			* temp,
+						* cour = Liste;
 	while(cour){
 		temp = cour;
 		cour = cour->suiv;
