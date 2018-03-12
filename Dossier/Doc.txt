@@ -1,0 +1,209 @@
+NB : La "mise en page" a été effectuée avec l'éditeur de texte atom                                     *
+
+
+********************************************************
+*    Fichier de principe et détail des fonctions       *
+*                                                      *
+********************************************************
+
+
+﻿=======================================================================
+
+AfficheErreur
+     Entrée :  codeErreur : code de l'erreur
+     Sortie : -
+     Variable locales : -
+
+Principe :
+     - Affiche un message d'erreur en fonction du code erreur
+
+
+=======================================================================
+insereDec
+     Entrée :  Liste     : liste chainée TRIEE par ordre décroissant
+               coef   	: cout de l'usine (float)
+               col 		: période (int)
+			lig 		: usine (int)
+     Sortie : liste chainée TRIEE par ordre décroissant avec la nouvelle cellule
+     Variable locales : n : nombre de colonnes
+                        m : Nombre de lignes
+                        fichier : fichier lu
+
+Prncipe :
+     - allocation nouvelle cellule
+     - Si allocation :
+          Recherche adresse où insérer la cellule
+ Ajout général
+
+=======================================================================
+suppEnTete
+     Entrée :  Liste     : liste chainée
+     Sortie : liste chainée à laquelle on a retiré la première valeur
+     Variable locales : temp : variable temporaire
+
+Principe: Passage par une variable intermédiaire pour libération
+
+
+=======================================================================
+AffListe
+     Entrée :  Liste     : liste chainée
+     Sortie : -
+     Variable locales : -
+
+Principe : Pour chaque élément de la liste : affichage du coefficient courant
+
+
+=======================================================================
+LibererListe
+     Entrée :  Liste     : liste chainée
+     Sortie : -
+     Variable locales : cour : pointeur courant
+                   	    temp : variable temporaire
+     Sous fonction : suppEnTete
+Principe :
+     Pour chaque élément de la liste, libération en tête
+
+
+=======================================================================
+FichierToMatrice
+     Entrée :  Nom       : le nom du fichier à lire (chaine de caractères)
+               NbLigne   : nombre de lignes (actualisé dans la fonction)
+              NbColonne : nombre de colonnes (actualisé dans la fonction)
+     Sortie : une matice contenant les coefficients du fichier lu
+              (NULL si échec)
+     Variable locales : n : nombre de colonnes (variable locale, type int)
+                      m : Nombre de lignes   (variable locale, type int)
+                      fichier : fichier lu
+     Sous-fonction  : LibererMatrice
+Principe :
+     - Ouverture du fichier
+     - Si ouverture réussi :
+          - Si le fichier n'est pas vide:
+               - Allocation d'une liste de pointeur
+               - Pour chaque élément de la liste et tant que l'allocation est correcte:
+                    - Allocation d'une liste (de coefficients)
+               - Si allocation Ok :
+                    - Remplissage de la matrice
+               - Sinon :
+                    - Libération de la matrice
+
+
+=======================================================================
+AfficheMatrice
+     Entrée : Tab :       matrice de dimension (contenant des flottants)
+              nbLigne :   nombre de lignes
+              nbColonne : nombre de colonnes
+     Sortie : -
+Variable locales : i : Ligne courrante
+                   j : Colonne courrante
+Prncipe : Pour chaque élément de la matrice : affichage de l'élément
+
+
+=======================================================================
+MatToListe
+     Entrée : Tab :       matrice 2 dimensions (contenant des flottants)
+              nbLigne :   nombre de lignes (de la matrice)
+              nbColonne : nombre de colonnes (de la matrice)
+     Sortie : Une liste chainée contenant les K-plus-petits coefficients
+              (ainsi que l'usine et la période)
+              NULL si échec
+
+     Variable locales : i : Ligne courrante
+                      l : Colonne courrante
+                      cmp : compteur, nombre d'élément dans la liste
+                      list : la liste en question
+     Sous fonctions : suppEnTete
+                      insereDec
+
+Principe :
+     Pour chaque élément de la matrice :
+          - On insère les K premières valeurs de la matrice par ordre décroissant
+          - Si l'élément courant est < au 1er élément de la matrice
+               - insertion de l'élément par ordre décroissant
+
+
+=======================================================================
+LibererMatrice
+     Entrée : Matrice :   matrice 2 dimensions (contenant des flottants)
+              nbLigne :   nombre de lignes (de la matrice)S
+     Sortie : -
+     Variable locales : i : Ligne courrante
+
+Principe :
+     Pour chaque ligne du tableau:
+          Suppression de la ligne
+     Suppression de la colonne
+
+
+=======================================================================
+Ecrire
+
+     Entrée : Nom :      Nom du fichier dans lequel on enregistre la liste
+              pliste :   liste chainée à sauvegarder
+     Sortie : -
+     Variable locales : fichier
+
+Principe:
+     - Ouverture du fichier
+     - Si ouverture OK :
+          - Pour tous les éléments de la liste
+               - Sauvegarde de l'élément dans le fichier
+
+=======================================================================
+SuppOcc
+     Entrée : pliste :   liste chainée
+              usine  :   usine à supprimer
+     Sortie : la liste sans occurence de l'usine "usine"
+     Variable locales :
+        - cour : pointeur courant
+        - prec: pointeur précédent
+        - temp : variable temporaire
+
+Principe :
+     - Pour chaque élément de la liste :
+          - Si c'est un élément de la l'usine U
+               - Si c'est le premier élément :
+                    Suppression en tête
+               - Sinon : Suppression cas général
+
+=======================================================================
+MAIN
+
+     Entrée :  4 arguments (chaine carac, chaine carac, entier,entier)
+              - FichierMatrice.txt : fichier contenant la matrice
+              - FichierResultat.txt : fichier où seront sauvegardés
+                                      les résultats (créé si inexistant)
+              - K : entier = nombre de coefficients à selectionner
+              - usine : entier = usine à supprimer
+     Sortie : Créer un fichier avec les différents coefficients si tout
+              s'est bien passé
+              Affiche un message d'erreur sinon
+     Variable locales : n : nombre de colonnes (variable locale, type int)
+                      m : Nombre de lignes   (variable locale, type int)
+                      NomFichier : nom ficher matrice
+                      NomFichierRep : nom fichier réponse
+                      chaineK : nombre de coefficients (type char *)
+                      chaineUsine : numéro usine (type char *)
+                      Matrice : Tableau de pointeurs de pointeurs
+                      liste : liste chainée contenant les K coefficients
+                      k : (type int) nombre de coefficients conservés
+                      usine : (type int) numéro usine
+     Sous-fonction  : AfficheErreur
+                    FichierToMatrice
+                    AfficheMatrice
+                    MatToListe
+                    SuppOcc
+                    AffListe
+                    Ecrire
+                    LibererListe
+                    LibererMatrice
+
+Principe :
+     - Si nombre argument correct :
+          - Récupération du fichier dans une matrice allouée dynamiquement
+          - Si la matrice correctement créée:
+               - Suppression des occurrences de l'usine u
+               - Affichage de la liste
+               - Sauvegarde de la liste dans un fichier extérieur
+               - Libération de la liste
+          - Libération de la liste
